@@ -2,7 +2,7 @@ from flask import Flask, request, send_from_directory
 from flask.templating import render_template
 
 # set the project root directory as the static folder, you can set others.
-app = Flask(__name__, static_folder='../assets')
+app = Flask(__name__, static_folder='../assets', template_folder='../assets')
 
 
 @app.route('/')
