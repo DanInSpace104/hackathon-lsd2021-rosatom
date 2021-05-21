@@ -1,3 +1,4 @@
+import json
 import time
 
 from paho.mqtt.client import Client
@@ -21,7 +22,8 @@ class SensorEngine:
 
     def loop_once(self) -> None:
         val = self.generate_value()
-        self.mqtt.publish(f'sensor/telemetry/{self.uuid}', val)
+        msg = {'uuid': self.uuid, 'name': self.name, 'ts': time.time(), 'val': val}
+        self.mqtt.publish(f'sensor/telemetry/{self.uuid}', json.dumps(msg))
 
     def generate_value(self):
         raise NotImplementedError()

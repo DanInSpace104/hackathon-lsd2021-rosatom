@@ -1,3 +1,4 @@
+import json
 import time
 
 import redis
@@ -11,14 +12,14 @@ rcache = redis.Redis()
 class LocalClient(Client):
     @staticmethod
     def on_message(client, userdata, msg):
-        msg = msg.payload.decode()
+        msg = json.loads(msg.payload)
         print(msg)
         rcache.set('tmp', f'message {msg} {time.time()}')
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):
         print('connected', time.time())
-        client.subscribe('/')
+        client.subscribe('sensor/telemetry/#')
         rcache.set('tmp', f'connected and subscribed {time.time()}')
 
     @staticmethod
