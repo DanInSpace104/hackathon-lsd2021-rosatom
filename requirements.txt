@@ -11,3 +11,11 @@ pathspec==0.8.1
 regex==2021.4.4
 toml==0.10.2
 Werkzeug==2.0.1
+greenlet==1.1.0
+eventlet==0.31.0
+python-engineio==4.0.0
+python-socketio==5.0.4
+Flask-SocketIO==5.0.1
+Flask-Cors==3.0.9
+redis==3.5.3
+redisworks==0.3.0
