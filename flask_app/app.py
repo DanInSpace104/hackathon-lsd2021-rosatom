@@ -1,10 +1,9 @@
-from flask import Flask, request, send_from_directory
-from flask.templating import render_template
-
 import json
+
 import flask_socketio
 import redis
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
+from flask.templating import render_template
 
 app = Flask(__name__, static_folder="../assets", template_folder='../assets')
 
@@ -15,6 +14,7 @@ from flask_cors import CORS
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 socketio = flask_socketio.SocketIO(app, cors_allowed_origins="*", async_mode=async_mode)
 rcache = redis.Redis()
+
 
 @socketio.on('connect', namespace='/apisocket0')
 def on_connect():
@@ -42,12 +42,14 @@ def background_thread(scheme_id):
     count = 0
     while True:
         data = rcache.get("tmp")
-        socketio.emit('my_response', json.dumps(data), namespace='/apisocket0')
-        socketio.sleep(1)
+        socketio.emit('my_response', str(data), namespace='/apisocket0')
+        socketio.sleep(0.5)
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/testsocket')
 def testsocket():

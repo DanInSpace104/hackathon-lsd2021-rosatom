@@ -1,65 +1,67 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title> Тест web socket</title>
-        <script type="text/javascript" src="/assets/libjs/socket.io.min.js"></script>
-        <script type="text/javascript" src="/assets/libjs/jquery-3.3.1.min.js"></script> 
-    </head>
-    <body>
-        
+
+<head>
+    <meta charset="utf-8">
+    <title> Тест web socket</title>
+    <script type="text/javascript" src="/assets/libjs/socket.io.min.js"></script>
+    <script type="text/javascript" src="/assets/libjs/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+
     <script type="text/javascript" src="/assets/js/wsocket-flask.js"></script>
-    
+
     <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
+        $(document).ready(function () {
             readyPage();
         });
 
-        readyPage = function()
-        {
-        
-        namespace = "/apisocket0"; //TODO в конфигах
-        wsuripath = "ws://localhost:5000/apisocket0"
-        console.log("connect"); //location.protocol + '//' + document.domain + ':' + location.port + namespace
-        const socket = io.connect(wsuripath);    
-        
-        socket.on('connect', function () {
-        console.log('Websocket connect', wsuripath);
-        
-        socket.emit('join', 0); //TODO shemeid
-        // $("#serverState").text("Установлено");
-        // $("#serverState").removeClass('btn-red-full').addClass('btn-green-full');
-        connectStatus = 1;
-    });
+        readyPage = function () {
 
-        socket.on('connection', function () {
-            console.log('Websocket connection');
-            $("#serverState").text("Устанавливается...");
-            $("#serverState").removeClass();
-            $("#serverState").addClass('btn-green-border');
-            connectStatus = 2;
-        });
+            namespace = "/apisocket0"; //TODO в конфигах
+            wsuripath = "ws://2.57.186.96:5000/apisocket0"
+            console.log("connect"); //location.protocol + '//' + document.domain + ':' + location.port + namespace
+            const socket = io.connect(wsuripath);
 
-        socket.on('disconnect', function () {
-            console.log('Websocket disconnect');
-            $("#serverState").text("Разорвано");
-            $("#serverState").removeClass('btn-green-full').addClass('btn-red-full');
-            connectStatus = -1;
-        });
+            socket.on('connect', function () {
+                console.log('Websocket connect', wsuripath);
 
+                socket.emit('join', 0); //TODO shemeid
+                // $("#serverState").text("Установлено");
+                // $("#serverState").removeClass('btn-red-full').addClass('btn-green-full');
+                connectStatus = 1;
+            });
 
-        socket.on('my_response', function (msg) {
-            console.log(msg);
-        });
+            socket.on('connection', function () {
+                console.log('Websocket connection');
+                $("#serverState").text("Устанавливается...");
+                $("#serverState").removeClass();
+                $("#serverState").addClass('btn-green-border');
+                connectStatus = 2;
+            });
 
-        socket.on('my_message', function (msg) { console.log(msg) })
-
-    }
-
-        </script>
-
-<button id="serverState" class="red_button" onClick="initWebSocket();">Connect</button> 
+            socket.on('disconnect', function () {
+                console.log('Websocket disconnect');
+                $("#serverState").text("Разорвано");
+                $("#serverState").removeClass('btn-green-full').addClass('btn-red-full');
+                connectStatus = -1;
+            });
 
 
-</body>    
+            socket.on('my_response', function (msg) {
+                console.log(msg);
+            });
+
+            socket.on('my_message', function (msg) { console.log(msg) })
+
+        }
+
+    </script>
+
+    <button id="serverState" class="red_button" onClick="initWebSocket();">Connect</button>
+
+
+</body>
+
 </html>

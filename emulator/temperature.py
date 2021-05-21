@@ -1,4 +1,5 @@
 import random
+import time
 
 from engine import SensorEngine
 
@@ -15,6 +16,9 @@ class TemperatureSensor(SensorEngine):
         return self.temperature
 
 
-if __name__ == '__main__':
-    t = TemperatureSensor('temperature 1', 1)
-    t.loop()
+sensors = [TemperatureSensor('', i) for i in range(100)]
+
+while True:
+    for s in sensors:
+        s.loop_once()
+    time.sleep(0.1)
