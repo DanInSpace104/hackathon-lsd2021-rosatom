@@ -19,33 +19,23 @@
 
         readyPage = function () {
 
-            namespace = "/apisocket0"; //TODO в конфигах
+            namespace = "/apisocket0";
             wsuripath = "ws://2.57.186.96:5000/apisocket0"
-            console.log("connect"); //location.protocol + '//' + document.domain + ':' + location.port + namespace
+            console.log("connect");
             const socket = io.connect(wsuripath);
 
             socket.on('connect', function () {
                 console.log('Websocket connect', wsuripath);
 
-                socket.emit('join', 0); //TODO shemeid
-                // $("#serverState").text("Установлено");
-                // $("#serverState").removeClass('btn-red-full').addClass('btn-green-full');
-                connectStatus = 1;
+                socket.emit('join', 0);
             });
 
             socket.on('connection', function () {
                 console.log('Websocket connection');
-                $("#serverState").text("Устанавливается...");
-                $("#serverState").removeClass();
-                $("#serverState").addClass('btn-green-border');
-                connectStatus = 2;
             });
 
             socket.on('disconnect', function () {
                 console.log('Websocket disconnect');
-                $("#serverState").text("Разорвано");
-                $("#serverState").removeClass('btn-green-full').addClass('btn-red-full');
-                connectStatus = -1;
             });
 
 
