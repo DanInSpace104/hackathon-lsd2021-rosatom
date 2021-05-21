@@ -12,9 +12,7 @@ rcache = redis.Redis()
 class LocalClient(Client):
     @staticmethod
     def on_message(client, userdata, msg):
-        msg = json.loads(msg.payload)
-        print(msg)
-        rcache.set('tmp', f'message {msg} {time.time()}')
+        rcache.set('tmp', msg.payload)
 
     @staticmethod
     def on_connect(client, userdata, flags, rc):

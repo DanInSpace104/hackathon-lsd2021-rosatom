@@ -16,7 +16,6 @@
         $(document).ready(function () {
             readyPage();
         });
-
         readyPage = function () {
 
             namespace = "/apisocket0";
@@ -41,16 +40,15 @@
 
             socket.on('my_response', function (msg) {
                 console.log(msg);
+                $("#field").val(msg)
             });
-
-            socket.on('my_message', function (msg) { console.log(msg) })
 
         }
 
     </script>
 
     <button id="serverState" class="red_button" onClick="initWebSocket();">Connect</button>
-
+    <input type="text" style="width: 100%" id="field"></p>
 
 </body>
 
