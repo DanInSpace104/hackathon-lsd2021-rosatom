@@ -27,7 +27,7 @@ function readyPage() {
         console.log('Websocket disconnect');
         connectStatus = -1;
     });
-    socket.on('my_response', function (msg) { console.log(msg) } ); //myfunc(); 
+    socket.on('my_response', function (msg) { console.log(msg) } ); //myfunc();
     socket.on('my_message', function (msg) { console.log(msg) })
 }
 
@@ -84,7 +84,7 @@ function main() {
 
     {
     const gltfLoader = new GLTFLoader();
-    gltfLoader.load('/assets/scene.gltf', (gltf) => {
+    gltfLoader.load('/assets/scheme/scene.gltf', (gltf) => {
       const root = gltf.scene;
       scene.add(root);
 
@@ -204,7 +204,7 @@ function main() {
         .subVectors(camera.position, boxCenter)
         .multiply(new THREE.Vector3(1, 0, 1))
         .normalize();
-        
+
     // move the camera to a position distance units way from the center
     // in whatever direction the camera was from the center already
     camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));

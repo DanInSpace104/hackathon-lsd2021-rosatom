@@ -1,29 +1,5 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
 
-<head>
-	<meta charset=utf-8>
-	<title>First Three.js app</title>
-	<style>
-		body {
-			margin: 0;
-		}
-
-		canvas {
-			width: 100%;
-			height: 100%
-		}
-
-	</style>
-</head>
-
-<body>
-	<script src="/assets/libjs/three.js"></script>
-	<script src="/assets/libjs/GLTFLoader.js"></script>
-	<script type="module" src="/assets/libjs/OrbitControls.js"></script>
-	<script type="module" src="/assets/js/custom.js"></script>
-	<h1>HELLO THERE</h1>
-	<canvas id="c"></canvas>
-</body>
-
-</html>
+{% block page %}
+<a href="/model">GO TO MODEL</a>
+{% endblock %}
