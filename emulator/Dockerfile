@@ -11,7 +11,6 @@ ARG MQTT_PORT=1883
 ENV MQTT_HOST ${MQTT_HOST}
 ENV MQTT_PORT ${MQTT_PORT}
 
-#RUN echo '{"host" : "${FLASK_HOST}" , "port": "${FLASK_PORT}"}' > config.json
 
 COPY . .
 EXPOSE 5000

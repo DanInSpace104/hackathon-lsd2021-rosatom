@@ -41,10 +41,12 @@ def on_disconnect():
 
 def background_thread(scheme_id):
     while True:
+        resp = {}
         for sensor in config['sensors']:
-            data = rcache.get(f'sensor/telemetry/{sensor["uuid"]}')
-            socketio.emit('my_response', json.loads(data), namespace='/apisocket0')
-        socketio.sleep(0.5)
+            data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
+            resp[data['uuid']] = data
+        socketio.emit('my_response', resp, namespace='/apisocket0')
+        socketio.sleep(1)
 
 
 @app.route('/')
@@ -61,9 +63,20 @@ def model_view():
 def yamltest():
     return render_template('yamltest.html')
 
+
 @app.route('/testsocket')
 def testsocket():
     return render_template('websockettest.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 
 if __name__ == '__main__':
