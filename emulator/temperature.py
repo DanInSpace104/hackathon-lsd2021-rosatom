@@ -8,11 +8,11 @@ from engine import SensorEngine
 class TemperatureSensor(SensorEngine):
     def __init__(self, name, uuid):
         super().__init__(name, uuid)
-        self.temperature = 10.0
+        self.temperature = 50.0
 
     def generate_value(self):
         rand = random.random()
-        self.temperature += 2 * (-1 + rand * 2)
+        self.temperature += 5 * (-1 + rand * 2)
         print(rand, self.temperature)
         return self.temperature
 
@@ -24,5 +24,8 @@ sensors = [TemperatureSensor(sensor['name'], sensor['uuid']) for sensor in confi
 
 while True:
     for s in sensors:
-        s.loop_once()
+        if s.uuid == 1:
+            s.loop_once(80)
+        else:
+            s.loop_once()
         time.sleep(0.5)
