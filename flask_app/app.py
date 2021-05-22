@@ -1,11 +1,11 @@
 import json
-
+import os
 import flask_socketio
 import redis
 from flask import Flask, request, send_from_directory
 from flask.templating import render_template
 
-app = Flask(__name__, static_folder="../assets", template_folder='../assets')
+app = Flask(__name__, static_folder="./assets", template_folder='./assets')
 
 async_mode = None
 
@@ -67,4 +67,6 @@ def testsocket():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host="0.0.0.0", port=5000)
+    FLASK_PORT = os.getenv('FLASK_PORT') if os.getenv('FLASK_PORT') else config.get('port')
+    FLASK_HOST = os.getenv('FLASK_HOST') if os.getenv('FLASK_HOST') else config.get('host')
+    socketio.run(app, debug=True, host=FLASK_HOST, port=FLASK_PORT)

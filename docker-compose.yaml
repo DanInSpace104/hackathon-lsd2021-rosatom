@@ -1,0 +1,55 @@
+services:
+  mqqt_test:
+    image: mqqt_test
+    container_name: mqqt_test
+    restart: always
+    volumes:
+      - influxdb:/var/lib/influxdb
+    environment:
+      - DEBUG=True
+      - TZ=Europe/Moscow
+      - INFL_ORG="Miciot"
+      - INFL_TOKEN="tOGsUG7dNLjcmj_4ruYzknCPXDjnwhYSv0gZCCq1yOeMvE2hqzvFyCQM3XawxQ8Z2-8DjwsQcu-mAuH0KiloDg=="
+      - INFL_URL="http://2.57.186.96:8086"
+      - MQTT_HOST="2.57.186.96"
+      - MQTT_PORT="1883"
+    ports:
+      - "1883:1883"
+    networks:
+      - default
+  flask_test:
+    image: flask_test
+    container_name: flask_test
+    network_mode: host
+    restart: always
+    environment:
+      - DEBUG=True
+      - FLASK_HOST="0.0.0.0"
+      - FLASK_PORT="5000"
+    ports:
+      - "5000:5000"
+#    networks:
+#      - default
+  emulator_test:
+    image: emulator_test
+    container_name: emulator_test
+    restart: always
+    environment:
+      - DEBUG=True
+      - TZ=Europe/Moscow
+      - MQTT_HOST="2.57.186.96"
+      - MQTT_PORT=1883
+    ports:
+      - "8013:80"
+    networks:
+      - default
+volumes:
+  influxdb:
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet:  172.30.0.1/16

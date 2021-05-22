@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 import influxdb_client
 import redis
@@ -9,9 +10,13 @@ from paho.mqtt.client import Client
 with open('config.json') as fl:
     config = json.load(fl)
 
+INFL_ORG = os.getenv('INFL_ORG') if os.getenv('INFL_ORG') else config['influx']['org']
+INFL_TOKEN = os.getenv('INFL_TOKEN') if os.getenv('INFL_TOKEN') else config['influx']['token']
+INFL_URL = os.getenv('INFL_URL') if os.getenv('INFL_URL') else config['influx']['url']
+
 rcache = redis.Redis()
 influx = influxdb_client.InfluxDBClient(
-    url=config['influx']['url'], token=config['influx']['token'], org=config['influx']['org']
+    url=INFL_URL, token=INFL_TOKEN, org=INFL_ORG
 )
 write_api = influx.write_api(write_options=ASYNCHRONOUS)
 query_api = influx.query_api()
@@ -42,6 +47,8 @@ class LocalClient(Client):
         rcache.set('mqtt/listener/status', f'disconnected {time.time()}')
 
 
+MQTT_PORT = os.getenv('MQTT_PORT') if os.getenv('MQTT_PORT') else config['mqtt'].get('port')
+MQTT_HOST = os.getenv('MQTT_HOST') if os.getenv('MQTT_HOST') else config['mqtt'].get('host')
 client = LocalClient()
-client.connect(config['mqtt']['host'], config['mqtt']['port'], config['mqtt']['keepalive'])
+client.connect(MQTT_HOST, int(MQTT_PORT), config['mqtt']['keepalive'])
 client.loop_forever()

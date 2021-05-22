@@ -1,0 +1,41 @@
+{
+    "mqtt": {
+        "host": "2.57.186.96",
+        "port": 1883,
+        "keepalive":  60
+    },
+    "sensors": [
+        {
+            "name": "Temerature1",
+            "uuid": 1
+        },
+        {
+            "name": "Temerature2",
+            "uuid": 2
+        },
+        {
+            "name": "Temerature3",
+            "uuid": 3
+        },
+        {
+            "name": "Temerature4",
+            "uuid": 4
+        },
+        {
+            "name": "Temerature5",
+            "uuid": 5
+        },
+        {
+            "name": "Temerature6",
+            "uuid": 6
+        },
+        {
+            "name": "Temerature7",
+            "uuid": 7
+        },
+        {
+            "name": "Temerature8",
+            "uuid": 8
+        }
+    ]
+}

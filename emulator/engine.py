@@ -1,5 +1,6 @@
 import json
 import time
+import os
 
 from paho.mqtt.client import Client
 
@@ -13,7 +14,9 @@ class SensorEngine:
         self.name = name
         self.uuid = uuid
         self.mqtt = Client()
-        self.mqtt.connect(config['mqtt']['host'], config['mqtt']['port'], config['mqtt']['keepalive'])
+        MQTT_PORT = os.getenv('MQTT_PORT') if os.getenv('MQTT_PORT') else config['mqtt'].get('port')
+        MQTT_HOST = os.getenv('MQTT_HOST') if os.getenv('MQTT_HOST') else config['mqtt'].get('host')
+        self.mqtt.connect(MQTT_HOST, int(MQTT_PORT), config['mqtt']['keepalive'])
 
     def loop(self) -> None:
         while True:

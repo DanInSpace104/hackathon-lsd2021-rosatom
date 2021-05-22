@@ -1,4 +1,4 @@
-import {OrbitControls} from '/assets/js/OrbitControls.js';
+import {OrbitControls} from '/flask_app/assets/libjs/OrbitControls.js';
 
 
 function main() {
@@ -88,13 +88,14 @@ function main() {
     // scene.add(light.target);
     let bulbLight, bulbMat, hemiLight, stats;
     let ballMat, cubeMat, floorMat;
+    let color =  0x000000
     const bulbGeometry = new THREE.SphereGeometry(0.2, 16, 8);
-    bulbLight = new THREE.PointLight(0xffee88, 1, 100, 2);
+    bulbLight = new THREE.PointLight(color, 1, 100, 2);
 
     bulbMat = new THREE.MeshStandardMaterial({
       emissive: 0xffffee,
       emissiveIntensity: 1,
-      color: 0x000000
+      color: 0x000000,
     });
     bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
     bulbLight.position.set(lights[i]['x'],lights[i]['y'],lights[i]['z']);
@@ -103,6 +104,13 @@ function main() {
     bulbLight.power = 30
     scene.add(bulbLight);
   }
+  const color = be1414;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(1000, 1000, 0);
+    light.target.position.set(-5, 0, 0);
+    scene.add(light);
+    scene.add(light.target);
   let hemiLight;
   hemiLight = new THREE.HemisphereLight( 0xddeeff, 0x0f0e0d, 0.02 );
   scene.add( hemiLight );
