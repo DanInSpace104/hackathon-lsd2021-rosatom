@@ -16,6 +16,10 @@ socketio = flask_socketio.SocketIO(app, cors_allowed_origins="*", async_mode=asy
 rcache = redis.Redis()
 
 
+with open('config.json') as fl:
+    config = json.load(fl)
+
+
 @socketio.on('connect', namespace='/apisocket0')
 def on_connect():
     print('Connect:', request.sid)
@@ -33,16 +37,13 @@ def on_join(scheme_id):
 @socketio.on('disconnect', namespace='/apisocket0')
 def on_disconnect():
     print('Disconnect:', request.sid)
-    for room in rooms.values():
-        if request.sid in room:
-            room.remove(request.sid)
 
 
 def background_thread(scheme_id):
-    count = 0
     while True:
-        data = rcache.get("tmp")
-        socketio.emit('my_response', str(data), namespace='/apisocket0')
+        for sensor in config['sensors']:
+            data = rcache.get(f'sensor/telemetry/{sensor["uuid"]}')
+            socketio.emit('my_response', json.loads(data), namespace='/apisocket0')
         socketio.sleep(0.5)
 
 

@@ -1,3 +1,4 @@
+import json
 import random
 import time
 
@@ -12,11 +13,14 @@ class TemperatureSensor(SensorEngine):
     def generate_value(self):
         rand = random.random()
         self.temperature += 2 * (-1 + rand * 2)
-        # print(rand, self.temperature)
+        print(rand, self.temperature)
         return self.temperature
 
 
-sensors = [TemperatureSensor('', i) for i in range(100)]
+with open('config.json') as fl:
+    config = json.load(fl)
+
+sensors = [TemperatureSensor(sensor['name'], sensor['uuid']) for sensor in config['sensors']]
 
 while True:
     for s in sensors:
