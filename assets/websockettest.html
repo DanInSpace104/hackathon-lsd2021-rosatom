@@ -40,7 +40,7 @@
 
             socket.on('my_response', function (msg) {
                 console.log(msg);
-                $("#field").val(msg)
+                $("#field").val(JSON.stringify(msg))
             });
         }
 
