@@ -25,4 +25,4 @@ sensors = [TemperatureSensor(sensor['name'], sensor['uuid']) for sensor in confi
 while True:
     for s in sensors:
         s.loop_once()
-        time.sleep(0.01)
+        time.sleep(0.5)

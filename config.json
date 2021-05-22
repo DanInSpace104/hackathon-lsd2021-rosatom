@@ -1,4 +1,15 @@
 {
+    "mqtt": {
+        "host": "localhost",
+        "port": 1883,
+        "keepalive":  60
+    },
+    "influx": {
+        "bucket": "hackaton",
+        "org": "Miciot",
+        "token": "tOGsUG7dNLjcmj_4ruYzknCPXDjnwhYSv0gZCCq1yOeMvE2hqzvFyCQM3XawxQ8Z2-8DjwsQcu-mAuH0KiloDg==",
+        "url": "http://localhost:8086"
+    },
     "sensors": [
         {
             "name": "Temerature1",

@@ -1,12 +1,20 @@
 import json
 import time
 
+import influxdb_client
 import redis
+from influxdb_client.client.write_api import ASYNCHRONOUS
 from paho.mqtt.client import Client
 
-import config
+with open('config.json') as fl:
+    config = json.load(fl)
 
 rcache = redis.Redis()
+influx = influxdb_client.InfluxDBClient(
+    url=config['influx']['url'], token=config['influx']['token'], org=config['influx']['org']
+)
+write_api = influx.write_api(write_options=ASYNCHRONOUS)
+query_api = influx.query_api()
 
 
 class LocalClient(Client):
@@ -14,6 +22,12 @@ class LocalClient(Client):
     def on_message(client, userdata, msg):
         msg = json.loads(msg.payload)
         print(msg)
+        p = (
+            influxdb_client.Point("my_measurement")
+            .tag('uuid', msg['uuid']).tag('name', msg['name'])
+            .field("temperature", msg['val'])
+        )
+        write_api.write(bucket=config['influx']['bucket'], org=config['influx']['org'], record=p)
         rcache.set(f'sensor/telemetry/{msg["uuid"]}', json.dumps(msg))
 
     @staticmethod
@@ -29,5 +43,5 @@ class LocalClient(Client):
 
 
 client = LocalClient()
-client.connect(config.HOST, config.PORT, config.KEEPALIVE)
+client.connect(config['mqtt']['host'], config['mqtt']['port'], config['mqtt']['keepalive'])
 client.loop_forever()
