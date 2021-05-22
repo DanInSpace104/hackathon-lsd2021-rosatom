@@ -21,4 +21,4 @@ sensors = [TemperatureSensor('', i) for i in range(100)]
 while True:
     for s in sensors:
         s.loop_once()
-    time.sleep(0.1)
+        time.sleep(0.01)
