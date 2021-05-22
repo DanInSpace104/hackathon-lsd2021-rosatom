@@ -1,54 +1,41 @@
-import {OrbitControls} from '/assets/js/OrbitControls.js';
-// import {readyPage} from "./wsocket-flask.js";
-
+import {OrbitControls} from '/assets/libjs/OrbitControls.js';
 import {} from '/assets/libjs/socket.io.min.js';
+// import {readyPage} from "./wsocket-flask.js";
 // import {myfunc} from '/assets/js/custom.js';
 
 let namespace;
 let wsuripath;
 var connectStatus;
-function readyPage (myfunc) {
+var  myfunc;
 
+function readyPage() {
     namespace = "/apisocket0"; //TODO в конфигах
-    wsuripath = "ws://2.57.186.96:5000/apisocket0"
+    wsuripath = "ws://127.0.0.1:5000/apisocket0" //2.57.186.96
     console.log("connect"); //location.protocol + '//' + document.domain + ':' + location.port + namespace
     const socket = io.connect(wsuripath);
 
     socket.on('connect', function () {
         console.log('Websocket connect', wsuripath);
-
         socket.emit('join', 0); //TODO shemeid
-        // $("#serverState").text("Установлено");
-        // $("#serverState").removeClass('btn-red-full').addClass('btn-green-full');
         connectStatus = 1;
     });
-
     socket.on('connection', function () {
         console.log('Websocket connection');
-        $("#serverState").text("Устанавливается...");
-        $("#serverState").removeClass();
-        $("#serverState").addClass('btn-green-border');
         connectStatus = 2;
     });
-
     socket.on('disconnect', function () {
         console.log('Websocket disconnect');
-        $("#serverState").text("Разорвано");
-        $("#serverState").removeClass('btn-green-full').addClass('btn-red-full');
         connectStatus = -1;
     });
-
-
-    socket.on('my_response', myfunc);
-
+    socket.on('my_response', function (msg) { console.log(msg) } ); //myfunc(); 
     socket.on('my_message', function (msg) { console.log(msg) })
-
 }
 
 
 
 
 function main() {
+  readyPage();
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 
@@ -117,7 +104,8 @@ function main() {
       controls.update();
     });
   }
-  function myfunc (msg) {
+
+  myfunc = function(msg) {
     var i;
     var text;
     var lights;
@@ -216,7 +204,7 @@ function main() {
         .subVectors(camera.position, boxCenter)
         .multiply(new THREE.Vector3(1, 0, 1))
         .normalize();
-
+        
     // move the camera to a position distance units way from the center
     // in whatever direction the camera was from the center already
     camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));
@@ -259,5 +247,6 @@ function main() {
 
   requestAnimationFrame(render);
 }
+
 
 main();
