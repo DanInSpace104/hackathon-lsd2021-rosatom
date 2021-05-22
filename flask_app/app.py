@@ -52,6 +52,11 @@ def index():
     return render_template('index.html')
 
 
+
+@app.route('/yamltest')
+def yamltest():
+    return render_template('yamltest.html')
+
 @app.route('/testsocket')
 def testsocket():
     return render_template('websockettest.html')
