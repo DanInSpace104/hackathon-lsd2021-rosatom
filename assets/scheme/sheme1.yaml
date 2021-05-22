@@ -1,0 +1,37 @@
+SensorParams:
+    - uuid: 33
+      name: “TT1”
+      location:
+            - 100 
+            - 100
+            - 100	
+      size:
+            - 100 
+            - 100
+            - 100
+      type: "ts"
+
+    - uuid: 34
+      name: “TT2”
+      location:
+            - 100 
+            - 100
+            - 100	
+      size:
+            - 100 
+            - 100
+            - 100
+      type: "ts"
+
+
+    - uuid: 35
+      name: “LED1”
+      location:
+            - 100 
+            - 100
+            - 100	
+      size:
+            - 100 
+            - 100
+            - 100
+      type: "lume"
