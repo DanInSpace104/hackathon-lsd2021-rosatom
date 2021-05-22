@@ -1,12 +1,12 @@
-import {OrbitControls} from '/assets/libjs/OrbitControls.js';
-import {} from '/assets/libjs/socket.io.min.js';
-import {} from '/assets/libjs/yaml.min.js';
+import { OrbitControls } from '/assets/libjs/OrbitControls.js';
+import { } from '/assets/libjs/socket.io.min.js';
+import { } from '/assets/libjs/yaml.min.js';
+import { GUI } from 'https://threejsfundamentals.org/threejs/../3rdparty/dat.gui.module.js';
 
 let namespace;
 let wsuripath;
 let connectStatus;
 var data = {};
-
 function readyPage() {
     namespace = "/apisocket0";
     wsuripath = "ws://2.57.186.96:5000/apisocket0"
@@ -29,22 +29,17 @@ function readyPage() {
     });
 
     socket.on('my_response', function (msg) {
-        // data[msg.uuid] = msg
-        // console.log(data.length)
-        console.log(msg.uuid)
-    })
-    socket.on('my_message', function (msg) {
-        data[msg['uuid']] = msg
+        data = msg
+        console.log(data)
     })
 }
 
 
 function main() {
-    let schemeObject = YAML.load("/assets/scheme/sheme1.yaml")
-    console.log(schemeObject)
-    readyPage();
+    readyPage()
+
     const canvas = document.querySelector('#c');
-    const renderer = new THREE.WebGLRenderer({canvas});
+    const renderer = new THREE.WebGLRenderer({ canvas });
 
     const fov = 45;
     const aspect = 2;  // the canvas default
@@ -56,92 +51,26 @@ function main() {
     const controls = new OrbitControls(camera, canvas);
     controls.target.set(0, 5, 0);
     controls.update();
-    var mesh;
+
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('black');
 
-    {
-        const planeSize = 40;
-
-        const loader = new THREE.TextureLoader();
-        const texture = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.magFilter = THREE.NearestFilter;
-        const repeats = planeSize / 2;
-        texture.repeat.set(repeats, repeats);
-
-        const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize);
-        const planeMat = new THREE.MeshPhongMaterial({
-            map: texture,
-            side: THREE.DoubleSide,
-        });
-        mesh = new THREE.Mesh(planeGeo, planeMat);
-        mesh.rotation.x = Math.PI * -.5;
-        scene.add(mesh);
-    }
 
     {
         const skyColor = 0xB1E1FF;  // light blue
         const groundColor = 0xB97A20;  // brownish orange
-        const intensity = 1;
+        const intensity = 0.5;
         const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
         scene.add(light);
     }
-
     {
-        const gltfLoader = new GLTFLoader();
-        gltfLoader.load('/assets/scene.gltf', (gltf) => {
-            var root = gltf.scene;
-            root.transparent = true
-            scene.add(root);
-
-            // compute the box that contains all the stuff
-            // from root and below
-            const box = new THREE.Box3().setFromObject(root);
-
-            const boxSize = box.getSize(new THREE.Vector3()).length();
-            const boxCenter = box.getCenter(new THREE.Vector3());
-
-            // set the camera to frame the box
-            frameArea(boxSize * 0.5, boxSize, boxCenter, camera);
-
-            // update the Trackball controls to handle the new size
-            controls.maxDistance = boxSize * 10;
-            controls.target.copy(boxCenter);
-            controls.update();
-        });
+        const color = 0xFFFFFF;
+        const intensity = 0.5;
+        const light = new THREE.DirectionalLight(color, intensity);
+        light.position.set(5, 10, 2);
+        scene.add(light);
+        scene.add(light.target);
     }
-
-    schemeObject = schemeObject['SensorParams']
-    for (let i = 0; i < schemeObject.length; i++) {
-
-        let bulbLight, bulbMat;
-
-        const bulbGeometry = new THREE.SphereGeometry(schemeObject[i]['size'][0] / 2, 16, 8);
-        bulbLight = new THREE.PointLight(0xffffff, 1, 100, 2);
-        bulbLight.name = schemeObject[i]['uuid']
-        let color = 0xffff00
-        if (bulbLight.name in data) {
-            color = new THREE.Color(0xf20000);
-        }
-        bulbMat = new THREE.MeshStandardMaterial({
-            emissive: color,
-            emissiveIntensity: 1,
-            color: 0xf20000
-        });
-
-        bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
-        bulbLight.position.set(schemeObject[i]['size'][0], schemeObject[i]['size'][1], schemeObject[i]['size'][2]);
-        bulbLight.decay = 10
-        bulbLight.power = 3000
-        scene.add(bulbLight);
-
-    }
-    let hemiLight;
-    hemiLight = new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.02);
-    scene.add(hemiLight);
-
 
     function frameArea(sizeToFitOnScreen, boxSize, boxCenter, camera) {
         const halfSizeToFitOnScreen = sizeToFitOnScreen * 0.5;
@@ -163,14 +92,75 @@ function main() {
         camera.near = boxSize / 100;
         camera.far = boxSize * 100;
 
-        scene.getObjectByName('')
         camera.updateProjectionMatrix();
 
         // point the camera to look at the center of the box
         camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
     }
 
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load('/assets/scheme/scene.gltf', (gltf) => {
+        const root = gltf.scene;
+        scene.add(root);
 
+        // compute the box that contains all the stuff
+        // from root and below
+        const box = new THREE.Box3().setFromObject(root);
+
+        const boxSize = box.getSize(new THREE.Vector3()).length();
+        const boxCenter = box.getCenter(new THREE.Vector3());
+
+        // set the camera to frame the box
+        frameArea(boxSize * 0.5, boxSize, boxCenter, camera);
+
+        // update the Trackball controls to handle the new size
+        controls.maxDistance = boxSize * 10;
+        controls.target.copy(boxCenter);
+        controls.update();
+    });
+
+    class ColorGUIHelper {
+        constructor(object, prop) {
+            this.object = object;
+            this.prop = prop;
+        }
+        get value() {
+            return `#${this.object[this.prop].getHexString()}`;
+        }
+        set value(hexString) {
+            this.object[this.prop].set(hexString);
+        }
+    }
+
+    function makeXYZGUI(gui, vector3, name, onChangeFn) {
+        const folder = gui.addFolder(name);
+        folder.add(vector3, 'x', -1000, 1000).onChange(onChangeFn);
+        folder.add(vector3, 'y', 0, 500).onChange(onChangeFn);
+        folder.add(vector3, 'z', -1000, 1000).onChange(onChangeFn);
+        folder.open();
+    }
+
+    {
+        const color = 0xFF0000;
+        const intensity = 1;
+        const light = new THREE.PointLight(color, intensity);
+        light.position.set(530, 10, -2720);
+        scene.add(light);
+
+        const helper = new THREE.PointLightHelper(light, 100);
+        scene.add(helper);
+
+        function updateLight() {
+            helper.update();
+        }
+
+        const gui = new GUI();
+        gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
+        gui.add(light, 'intensity', 0, 2, 0.01);
+        gui.add(light, 'distance', 0, 40).onChange(updateLight);
+
+        makeXYZGUI(gui, light.position, 'position');
+    }
     function resizeRendererToDisplaySize(renderer) {
         const canvas = renderer.domElement;
         const width = canvas.clientWidth;
@@ -188,10 +178,9 @@ function main() {
             camera.aspect = canvas.clientWidth / canvas.clientHeight;
             camera.updateProjectionMatrix();
         }
-        // console.log(data)
-        // scene.getObjectByName('light1').position.set(data.val,100,200)
+
         renderer.render(scene, camera);
-        // scene.getObjectByName('light2').material.color.set("rgb(255, 0, 0)");
+
         requestAnimationFrame(render);
     }
 
@@ -199,7 +188,3 @@ function main() {
 }
 
 main();
-
-function myfunc(msg) {
-    console.log(msg);
-}
