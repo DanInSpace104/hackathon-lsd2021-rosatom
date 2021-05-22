@@ -98,6 +98,7 @@ function main() {
         camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
     }
 
+
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('/assets/scheme/scene.gltf', (gltf) => {
         const root = gltf.scene;
@@ -140,12 +141,72 @@ function main() {
         folder.open();
     }
 
+
+    function randomVelocity() {
+        var dx = 0.001 + 0.003*Math.random();
+        var dy = 0.001 + 0.003*Math.random();
+        var dz = 0.001 + 0.003*Math.random();
+        if (Math.random() < 0.5) {
+            dx = -dx;
+        }
+        if (Math.random() < 0.5) {
+            dy = -dy;
+        }
+        if (Math.random() < 0.5) {
+            dz = -dz;
+        }
+        return new THREE.Vector3(dx,dy,dz);
+    }
+    
+    function makePointCloud(color,dx,dy,dz){
+        var MAX_POINTS = 10000; 
+        var spinSpeeds;  
+        var driftSpeeds;
+        var i = 0;
+        var material;
+        var pointCloud;
+        const points = [];
+ 
+        spinSpeeds = new Array(MAX_POINTS);
+        driftSpeeds = new Array(MAX_POINTS);
+        var i = 0;
+        var yaxis = new THREE.Vector3(1,0,1);
+        while (i < MAX_POINTS) {
+            var x = 2*Math.random() - 1;
+            var y = 2*Math.random() - 1;
+            var z = 2*Math.random() - 1;
+            if ( x*x + y*y + z*z < 1 ) {  // only use points inside the unit sphere
+        var yaxis = new THREE.Vector3(1,0,1);
+        var angularSpeed = 10.001 + Math.random()/5;  // angular speed of rotation about the y-axis
+                spinSpeeds[i] = new THREE.Quaternion();
+                spinSpeeds[i].setFromAxisAngle(yaxis,angularSpeed);  // The quaternian for rotation by angularSpeed radians about the y-axis.
+                driftSpeeds[i] = randomVelocity();
+                points.push(new THREE.Vector3(x+dx, y+dy, z+dz))
+                i++;
+            }
+        }
+        let geometry = new THREE.BufferGeometry().setFromPoints( points );
+        material = new THREE.PointsMaterial({
+                color: color,
+                size: 2,
+                sizeAttenuation: false
+            });
+        geometry.scale(300, 300, 300);
+        pointCloud = new THREE.Points(geometry,material);
+	return pointCloud;
+    }
+
     {
         const color = 0xFF0000;
         const intensity = 1;
         const light = new THREE.PointLight(color, intensity);
         light.position.set(530, 10, -2720);
         scene.add(light);
+
+        scene.add(makePointCloud('red',0,0,0));
+        scene.add(makePointCloud('green',0.5,1,1));
+        scene.add(makePointCloud('',0.5,1,1));
+
 
         const helper = new THREE.PointLightHelper(light, 100);
         scene.add(helper);
