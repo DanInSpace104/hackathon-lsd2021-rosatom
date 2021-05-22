@@ -1,0 +1,31 @@
+.main-content #sidebar-toggle {
+    background: #DF314D;
+    border-radius: 3px;
+    display: block;
+    position: relative;
+    padding: 10px 7px;
+    float: left;
+}
+.main-content #sidebar-toggle .bar{
+     display: block;
+    width: 18px;
+    margin-bottom: 3px;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 1px;
+}
+.main-content #sidebar-toggle .bar:last-child{
+     margin-bottom: 0;
+}
+.left-panel {
+    left: -240px;
+    width: 240px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.open-sidebar {
+    left: 0;
+}
+.open-sidebar-button {
+    left: 240px;
+}

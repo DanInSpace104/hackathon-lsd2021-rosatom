@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type: text/html;charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title> </title>
+  <meta name="msapplication-TileColor" content="#232435">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  {% block headstyles %}
+  {% endblock headstyles %}
+  {% block headscript %}
+  {% endblock headscript %}
+
+
+</head>
+
+<body>
+  <div id="root">
+    {% block leftmenu %}{% endblock leftmenu %}
+    {% block page %}{% endblock page %}
+  </div>
+  {% block bottomscript %}
+  {% endblock bottomscript %}
+</body>
+
+</html>
