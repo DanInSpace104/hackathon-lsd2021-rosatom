@@ -135,9 +135,9 @@ function main() {
 
     function makeXYZGUI(gui, vector3, name, onChangeFn) {
         const folder = gui.addFolder(name);
-        folder.add(vector3, 'x', -1000, 1000).onChange(onChangeFn);
-        folder.add(vector3, 'y', 0, 500).onChange(onChangeFn);
-        folder.add(vector3, 'z', -1000, 1000).onChange(onChangeFn);
+        folder.add(vector3, 'x', -5000, 5000).onChange(onChangeFn);
+        folder.add(vector3, 'y', 0, 5000).onChange(onChangeFn);
+        folder.add(vector3, 'z', -5000, 5000).onChange(onChangeFn);
         folder.open();
     }
 
