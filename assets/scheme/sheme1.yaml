@@ -1,37 +1,98 @@
 SensorParams:
-    - uuid: 33
+    - uuid: 1
       name: “TT1”
       location:
-            - 100 
             - 100
-            - 100	
+            - 1000
+            - 1000
       size:
-            - 100 
-            - 100
+            - 1700
+            - 1200
             - 100
       type: "ts"
 
-    - uuid: 34
+    - uuid: 2
       name: “TT2”
       location:
-            - 100 
+            - 140
             - 100
-            - 100	
+            - 1300
       size:
-            - 100 
-            - 100
-            - 100
+            - 1000
+            - 1100
+            - 1100
       type: "ts"
 
 
-    - uuid: 35
+    - uuid: 3
       name: “LED1”
       location:
-            - 100 
+            - 780
             - 100
-            - 100	
+            - 900
       size:
             - 100 
             - 100
             - 100
+      type: "lume"
+
+    - uuid: 4
+      name: “LED1”
+      location:
+        - 100
+        - 100
+        - 100
+      size:
+        - 100
+        - 100
+        - 100
+      type: "lume"
+
+
+    - uuid: 5
+      name: “LED1”
+      location:
+        - 100
+        - 100
+        - 100
+      size:
+        - 100
+        - 100
+        - 100
+      type: "lume"
+
+    - uuid: 6
+      name: “LED1”
+      location:
+        - 100
+        - 100
+        - 100
+      size:
+        - 100
+        - 100
+        - 100
+      type: "lume"
+
+    - uuid: 7
+      name: “LED1”
+      location:
+        - 100
+        - 100
+        - 100
+      size:
+        - 100
+        - 100
+        - 100
+      type: "lume"
+
+    - uuid: 8
+      name: “LED1”
+      location:
+        - 100
+        - 100
+        - 100
+      size:
+        - 100
+        - 100
+        - 100
       type: "lume"
