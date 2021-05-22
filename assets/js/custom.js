@@ -1,54 +1,42 @@
-import {OrbitControls} from '/assets/js/OrbitControls.js';
-// import {readyPage} from "./wsocket-flask.js";
-
+import {OrbitControls} from '/assets/libjs/OrbitControls.js';
 import {} from '/assets/libjs/socket.io.min.js';
-// import {myfunc} from '/assets/js/custom.js';
 
 let namespace;
 let wsuripath;
 var connectStatus;
-function readyPage (myfunc) {
+var myfunc;
+var data = 100;
 
+function readyPage () {
     namespace = "/apisocket0"; //TODO в конфигах
     wsuripath = "ws://2.57.186.96:5000/apisocket0"
     console.log("connect"); //location.protocol + '//' + document.domain + ':' + location.port + namespace
     const socket = io.connect(wsuripath);
-
     socket.on('connect', function () {
         console.log('Websocket connect', wsuripath);
-
         socket.emit('join', 0); //TODO shemeid
-        // $("#serverState").text("Установлено");
-        // $("#serverState").removeClass('btn-red-full').addClass('btn-green-full');
         connectStatus = 1;
     });
 
     socket.on('connection', function () {
         console.log('Websocket connection');
-        $("#serverState").text("Устанавливается...");
-        $("#serverState").removeClass();
-        $("#serverState").addClass('btn-green-border');
         connectStatus = 2;
     });
 
     socket.on('disconnect', function () {
         console.log('Websocket disconnect');
-        $("#serverState").text("Разорвано");
-        $("#serverState").removeClass('btn-green-full').addClass('btn-red-full');
         connectStatus = -1;
     });
 
-
-    socket.on('my_response', myfunc);
-
+    socket.on('my_response', function (msg) { data = msg }  )
     socket.on('my_message', function (msg) { console.log(msg) })
-
 }
 
 
 
 
 function main() {
+  readyPage();
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 
@@ -98,7 +86,8 @@ function main() {
     {
     const gltfLoader = new GLTFLoader();
     gltfLoader.load('/assets/scene.gltf', (gltf) => {
-      const root = gltf.scene;
+      var root = gltf.scene;
+      root.transparent = true
       scene.add(root);
 
       // compute the box that contains all the stuff
@@ -117,8 +106,8 @@ function main() {
       controls.update();
     });
   }
-  function myfunc (msg) {
-    var i;
+
+  var i;
     var text;
     var lights;
     lights = [{'x': 5, 'y': 10, 'z': 2}, {'x': 5, 'y': 5, 'z': 2}, {'x': 3, 'y': 2, 'z': 1}, {'x': 5, 'y': 1, 'z': 2},
@@ -138,27 +127,33 @@ function main() {
       // scene.add(light.target);
       let bulbLight, bulbMat, hemiLight, stats;
       let ballMat, cubeMat, floorMat;
+      const color = new THREE.Color('rgb');
       const bulbGeometry = new THREE.SphereGeometry(200, 16, 8);
-      bulbLight = new THREE.PointLight(0xffee88, 1, 100, 2);
+      bulbLight = new THREE.PointLight(0xf20000, 1, 100, 2);
 
       bulbMat = new THREE.MeshStandardMaterial({
-        emissive: 0xffffee,
+        emissive: color,
         emissiveIntensity: 1,
-        color: 0x000000
+        color: 0xffee88
       });
-
-      console.log(msg);
+      bulbLight.name = "light" + i
       bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
       bulbLight.position.set(lights[i]['x'], lights[i]['y'], lights[i]['z']);
-      bulbLight.castShadow = true;
-      bulbLight.decay = 100
-      bulbLight.power = 300
+      bulbLight.decay = 10
+      bulbLight.power = 3000
       scene.add(bulbLight);
-    }
-  }
-  let hemiLight;
-  hemiLight = new THREE.HemisphereLight( 0xddeeff, 0x0f0e0d, 0.02 );
-  scene.add( hemiLight );
+
+    } let hemiLight;
+          hemiLight = new THREE.HemisphereLight( 0xddeeff, 0x0f0e0d, 0.02 );
+      scene.add( hemiLight );
+  const color = 0xf20000;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(1000, 1000, 0);
+    light.target.position.set(-5, 0, 0);
+    scene.add(light);
+    scene.add(light.target);
+
 
 
 
@@ -226,6 +221,7 @@ function main() {
     camera.near = boxSize / 100;
     camera.far = boxSize * 100;
 
+    scene.getObjectByName('')
     camera.updateProjectionMatrix();
 
     // point the camera to look at the center of the box
@@ -251,9 +247,10 @@ function main() {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
-
+    // console.log(data)
+    // scene.getObjectByName('light1').position.set(data.val,100,200)
     renderer.render(scene, camera);
-
+    // scene.getObjectByName('light2').material.color.set("rgb(255, 0, 0)");
     requestAnimationFrame(render);
   }
 
@@ -261,3 +258,9 @@ function main() {
 }
 
 main();
+
+  myfunc = function(msg) {
+  var i;
+  console.log(msg);
+
+  }
