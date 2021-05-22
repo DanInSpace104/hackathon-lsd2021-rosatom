@@ -3,8 +3,8 @@ import time
 
 from paho.mqtt.client import Client
 
-import config
-
+with open('config.json') as fl:
+    config = json.load(fl)
 
 class SensorEngine:
     LOOP_TIMEOUT = 0.5
@@ -13,7 +13,7 @@ class SensorEngine:
         self.name = name
         self.uuid = uuid
         self.mqtt = Client()
-        self.mqtt.connect(config.MQTT_HOST, config.MQTT_PORT, config.MQTT_KEEPALIVE)
+        self.mqtt.connect(config['mqtt']['host'], config['mqtt']['port'], config['mqtt']['keepalive'])
 
     def loop(self) -> None:
         while True:
