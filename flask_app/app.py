@@ -225,6 +225,23 @@ def background_thread_ligth(scheme_id):
         )
         socketio.sleep(1)
 
+def background_thread_energo(scheme_id):
+    while True:
+        colors_energo = []
+        for sensor in config['sensors']:
+            data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
+            colors_energo.append(val2col_light(data['val']))
+
+        res = createColorGrid(
+            (100, 100), colors_energo[0], colors_energo[1], colors_energo[2], colors_energo[3]
+        )
+        socketio.emit(
+            'my_response',
+            res,
+            namespace='/apisocket2',
+        )
+        socketio.sleep(1)
+
 
 @app.route('/')
 def index():

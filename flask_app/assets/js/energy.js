@@ -31,7 +31,7 @@ let wsuripath;
 let connectStatus;
 function readyPage() {
     namespace = "/apisocket0";
-    wsuripath = "ws://2.57.186.96:5000/apisocket0"
+    wsuripath = "ws://2.57.186.96:5000/apisocket2"
     console.log("connect");
     const socket = io.connect(wsuripath);
     socket.on('connect', function () {
