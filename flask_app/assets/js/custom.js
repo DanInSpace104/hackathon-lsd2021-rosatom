@@ -8,16 +8,16 @@ import Stats from '/assets/libjs/stats.module.js';
 
 
 let config = YAML.load("/assets/scheme/sheme1.yaml")['SensorParams']
-let data
+let data = []
 
 const resolution = 100
 const STEP = 0.14
 const field = [] // 2d array
 const particles = resolution * resolution
 for (let i = 0; i < resolution; i++) {
-    field.push([])
+    data.push([])
     for (let j = 0; j < resolution; j++) {
-        field[i].push(0)
+        data[i].push([0, 0, 0])
     }
 }
 const NET_ZERO_X = -5
@@ -50,8 +50,8 @@ function readyPage() {
     });
 
     socket.on('my_response', function (msg) {
+	console.log('hi')
         // console.log(msg)
-        console.log(msg,'hello')
         data = msg
     })
 }
@@ -184,7 +184,6 @@ function animate() {
     const positions = [];
     var colors = [];
 
-    const color = new THREE.Color();
 
 
     colors = [];
@@ -198,6 +197,7 @@ function animate() {
     }
 
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    console.log('anum')
 
 }
 

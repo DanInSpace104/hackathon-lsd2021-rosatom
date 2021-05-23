@@ -12,7 +12,7 @@ class TemperatureSensor(SensorEngine):
 
     def generate_value(self):
         rand = random.random()
-        self.temperature += 5 * (-1 + rand * 2)
+        self.temperature += 20 * (-1 + rand * 2)
         print(rand, self.temperature)
         return self.temperature
 
@@ -28,4 +28,4 @@ while True:
             s.loop_once(80)
         else:
             s.loop_once()
-        time.sleep(0.5)
+        time.sleep(0.25)

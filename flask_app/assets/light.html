@@ -1,25 +1,61 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 
 <head>
-	<meta charset=utf-8>
-	<title>First Three.js app</title>
-	<style>
-		body {
-			margin: 0;
-		}
+    <meta http-equiv="Content-Type: text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="apple-touch-icon" sizes="152x152" href='assets/favicon/apple-touch-icon.png'>
+    <link rel="icon" type="image/png" sizes="32x32" href='assets/favicon/favicon-32x32.png'>
+    <link rel="icon" type="image/png" sizes="16x16" href='assets/favicon/favicon-16x16.png'>
+    <link rel="manifest" href='assets/favicon/site.webmanifest'>
+    <link rel="mask-icon" href='assets/favicon/safari-pinned-tab.svg' color="#5bbad5">
+    <link rel="shortcut icon" href='assets/favicon/favicon.ico'>
+    <meta name="theme-color" content="#ffffff">
 
-		canvas {
-			width: 100%;
-			height: 100%
-		}
+    <link rel="stylesheet" href='assets/style.css'>
 
-	</style>
+    <title>MicIot</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+
+    </style>
 </head>
 
 <body>
-	<div id="container"></div>
-	<script type="module" src="/assets/js/ligth.js"></script>
+    <div class="left-panel">
+        <div class="logo-area">
+            <div class="logo">
+                <img src='assets/img/logo-index.png' alt="logo">
+            </div>
+            <div class="logo-desc">
+            </div>
+        </div>
+
+        <div class="main-menu">
+            <div class="main-menu-item ">
+                <a href="/" class="main-menu-link">○ Температура</a>
+            </div>
+            <div class="main-menu-item ">
+                <a href="" class="main-menu-link">○ Освещенность</a>
+            </div>
+            <div class="main-menu-item ">
+                <a href="/energy" class="main-menu-link">○ Энергопотребление</a>
+            </div>
+            <div class="main-menu-item ">
+                <a href="http://2.57.186.96:5000/orgs/bdd322c70af1b97b/data-explorer" class="main-menu-link">○ База данных значений</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module" src="/assets/js/light.js"></script>
     <canvas id="c"></canvas>
     <div id="container">
         </container>

@@ -1,8 +1,7 @@
 import json
 import os
+
 import flask_socketio
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
 import redis
 from flask import Flask, request, send_from_directory
@@ -74,6 +73,25 @@ def on_disconnect():
     print('Disconnect:', request.sid)
 
 
+@socketio.on('connect', namespace='/apisocket1')
+def on_connect():
+    print('Connect:', request.sid)
+    socketio.emit('my_message', {'data': 'Connected', 'count': 1})
+
+
+@socketio.on('join', namespace='/apisocket1')
+def on_join(scheme_id):
+    print('Join:', scheme_id)
+    flask_socketio.join_room(scheme_id)
+    socketio.emit('my_message', f'joined room {scheme_id}')
+    socketio.start_background_task(target=background_thread_ligth, scheme_id=scheme_id)
+
+
+@socketio.on('disconnect', namespace='/apisocket1')
+def on_disconnect():
+    print('Disconnect:', request.sid)
+
+
 def colorFader(c1, c2, mix=0):  # fade (linear interpolate) from color c1 (at mix=0) to c2 (mix=1)
     c1 = np.array(mpl.colors.to_rgb(c1))
     c2 = np.array(mpl.colors.to_rgb(c2))
@@ -83,7 +101,7 @@ def colorFader(c1, c2, mix=0):  # fade (linear interpolate) from color c1 (at mi
 def hex_to_rgb(value):
     value = value.lstrip('#')
     lv = len(value)
-    return tuple(int(value[i: i + lv // 3], 16) for i in range(0, lv, lv // 3))
+    return tuple(int(value[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
 
 def val2col_light(val):
@@ -174,25 +192,36 @@ def val2col_electro(val):
 
 def background_thread(scheme_id):
     while True:
-        colors = []
+        colors_temp = []
         for sensor in config['sensors']:
             data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
-            if sensor["uuid"] in (1, 2, 3, 4):
-                colors_temp.append(val2col(data['val']))
-            else:
-                colors_light.append(val2col_light(data['val']))
+            colors_temp.append(val2col(data['val']))
 
-        res = createColorGrid((100, 100), colors_temp[0], colors_temp[1], colors_temp[2], colors_temp[3])
+        res = createColorGrid(
+            (100, 100), colors_temp[0], colors_temp[1], colors_temp[2], colors_temp[3]
+        )
         socketio.emit(
             'my_response',
             res,
             namespace='/apisocket0',
         )
-        res = createColorGrid((100, 100), colors_light[0], colors_light[1], colors_light[2], colors_light[3])
+        socketio.sleep(1)
+
+
+def background_thread_ligth(scheme_id):
+    while True:
+        colors_light = []
+        for sensor in config['sensors']:
+            data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
+            colors_light.append(val2col_light(data['val']))
+
+        res = createColorGrid(
+            (100, 100), colors_light[0], colors_light[1], colors_light[2], colors_light[3]
+        )
         socketio.emit(
-            'my_response_light',
+            'my_response',
             res,
-            namespace='/apisocket0',
+            namespace='/apisocket1',
         )
         socketio.sleep(1)
 
@@ -202,14 +231,10 @@ def index():
     return render_template('index.html')
 
 
+
 @app.route('/model')
 def model_view():
     return render_template('model.html')
-
-
-@app.route('/electro')
-def electro_view():
-    return render_template('electro.html')
 
 
 @app.route('/light')
@@ -231,12 +256,18 @@ def login():
     return render_template('login.html')
 
 
+
+@app.route('/energy')
+def energy():
+    return render_template('energy.html')
+
+
 @app.route('/test')
 def test():
     return render_template('test.html')
 
 
 if __name__ == '__main__':
-    FLASK_PORT = os.getenv('FLASK_PORT') if os.getenv('FLASK_PORT') else config.get('port')
-    FLASK_HOST = os.getenv('FLASK_HOST') if os.getenv('FLASK_HOST') else config.get('host')
+    FLASK_PORT = os.getenv('FLASK_PORT') if os.getenv('FLASK_PORT') else config['flask'].get('port')
+    FLASK_HOST = os.getenv('FLASK_HOST') if os.getenv('FLASK_HOST') else config['flask'].get('host')
     socketio.run(app, debug=True, host=FLASK_HOST, port=FLASK_PORT)
