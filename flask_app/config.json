@@ -46,6 +46,22 @@
         {
             "name": "Light4",
             "uuid": 8
+        },
+                 {
+            "name": "Electro1",
+            "uuid": 9
+        },
+        {
+            "name": "Electro2",
+            "uuid": 10
+        },
+        {
+            "name": "Electro3",
+            "uuid": 11
+        },
+        {
+            "name": "Electro4",
+            "uuid": 12
         }
     ]
 }

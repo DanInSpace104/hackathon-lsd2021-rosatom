@@ -1,4 +1,5 @@
 import * as THREE from '/assets/libjs/three.module.js';
+
 import { } from '/assets/libjs/socket.io.min.js';
 import { } from '/assets/libjs/yaml.min.js';
 import { OrbitControls } from '/assets/libjs/OrbitControls.js';
@@ -49,7 +50,7 @@ function readyPage() {
         connectStatus = -1;
     });
 
-    socket.on('my_response', function (msg) {
+    socket.on('my_response_electro', function (msg) {
         // console.log(msg)
         console.log(msg,'hello')
         data = msg
@@ -108,7 +109,7 @@ function init() {
         });
     });
 
-    geometry = new THREE.BufferGeometry();
+    let geometry = new THREE.BufferGeometry();
 
     const positions = [];
     var colors = [];
@@ -140,12 +141,34 @@ function init() {
 
     //
 
-    const material = new THREE.PointsMaterial({ size: SIZE, vertexColors: true });
+    let material = new THREE.PointsMaterial({ size: SIZE, vertexColors: true });
 
     points = new THREE.Points(geometry, material);
     scene.add(points);
 
+    geometry = new THREE.BoxGeometry( 1, 1, 0.4 );
+    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
+    let cube = new THREE.Mesh( geometry, material );
+    cube.position.set(-4.5,2,4.8)
+    scene.add( cube );
 
+    geometry = new THREE.BoxGeometry(1, 1, 0.4 );
+    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
+    cube = new THREE.Mesh( geometry, material );
+    cube.position.set(8.5,2,6)
+    scene.add( cube );
+
+    geometry = new THREE.BoxGeometry( 0.8, 0.8, 0.2 );
+    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
+    cube = new THREE.Mesh( geometry, material );
+    cube.position.set(-4.2,2,-5.2)
+    scene.add( cube );
+
+    geometry = new THREE.BoxGeometry( 0.8, 0.8, 0.2 );
+    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
+    cube = new THREE.Mesh( geometry, material );
+    cube.position.set(7,2,-3.2)
+    scene.add( cube );
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);

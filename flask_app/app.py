@@ -152,6 +152,25 @@ def val2col(val):
     else:
         return (0, 0, 0)
 
+def val2col_electro(val):
+    val = val / 100 * 3
+    i = val
+    if i < 0.2:
+        return (0, 0, 0)
+    elif i < 0.6:
+        return (100, 149, 237)
+    elif i < 1.0:
+        return (25, 25, 112)
+    elif i < 1.6:
+        return (60, 179, 113)
+    elif i < 2.0:
+        return (0, 100, 0)
+    elif i < 2.4:
+        return (205, 92, 92)
+    elif i < 2.8:
+        return (178, 34, 34)
+    else:
+        return (0, 0, 0)
 
 def background_thread(scheme_id):
     while True:
@@ -187,6 +206,15 @@ def index():
 def model_view():
     return render_template('model.html')
 
+
+@app.route('/electro')
+def electro_view():
+    return render_template('electro.html')
+
+
+@app.route('/light')
+def light_view():
+    return render_template('light.html')
 
 @app.route('/yamltest')
 def yamltest():
