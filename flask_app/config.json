@@ -30,22 +30,6 @@
         {
             "name": "Temerature4",
             "uuid": 4
-        },
-        {
-            "name": "Temerature5",
-            "uuid": 5
-        },
-        {
-            "name": "Temerature6",
-            "uuid": 6
-        },
-        {
-            "name": "Temerature7",
-            "uuid": 7
-        },
-        {
-            "name": "Temerature8",
-            "uuid": 8
         }
     ]
 }

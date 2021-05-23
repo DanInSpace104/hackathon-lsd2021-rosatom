@@ -2,97 +2,82 @@ SensorParams:
     - uuid: 1
       name: “TT1”
       location:
-            - 100
-            - 1000
-            - 1000
-      size:
-            - 1700
-            - 1200
-            - 100
+            - 50
+            - 50
+      size: 2
       type: "ts"
+
 
     - uuid: 2
       name: “TT2”
       location:
-            - 140
-            - 100
-            - 1300
-      size:
-            - 1000
-            - 1100
-            - 1100
+            - 10
+            - 10
+      size: 0.5
       type: "ts"
 
 
     - uuid: 3
       name: “LED1”
       location:
-            - 780
-            - 100
-            - 900
-      size:
-            - 100 
-            - 100
-            - 100
+            - 10
+            - 80
+      size: 1
       type: "lume"
 
     - uuid: 4
       name: “LED1”
       location:
-        - 100
-        - 100
-        - 100
-      size:
-        - 100
-        - 100
-        - 100
+        - 80
+        - 10
+      size: 1
       type: "lume"
 
 
-    - uuid: 5
-      name: “LED1”
-      location:
-        - 100
-        - 100
-        - 100
-      size:
-        - 100
-        - 100
-        - 100
-      type: "lume"
+    # - uuid: 5
+    #   name: “LED1”
+    #   location:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   size:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   type: "lume"
 
-    - uuid: 6
-      name: “LED1”
-      location:
-        - 100
-        - 100
-        - 100
-      size:
-        - 100
-        - 100
-        - 100
-      type: "lume"
+    # - uuid: 6
+    #   name: “LED1”
+    #   location:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   size:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   type: "lume"
 
-    - uuid: 7
-      name: “LED1”
-      location:
-        - 100
-        - 100
-        - 100
-      size:
-        - 100
-        - 100
-        - 100
-      type: "lume"
+    # - uuid: 7
+    #   name: “LED1”
+    #   location:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   size:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   type: "lume"
 
-    - uuid: 8
-      name: “LED1”
-      location:
-        - 100
-        - 100
-        - 100
-      size:
-        - 100
-        - 100
-        - 100
-      type: "lume"
+    # - uuid: 8
+    #   name: “LED1”
+    #   location:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   size:
+    #     - 100
+    #     - 100
+    #     - 100
+    #   type: "lume"
