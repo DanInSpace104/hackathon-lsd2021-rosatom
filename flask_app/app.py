@@ -83,7 +83,35 @@ def colorFader(c1, c2, mix=0):  # fade (linear interpolate) from color c1 (at mi
 def hex_to_rgb(value):
     value = value.lstrip('#')
     lv = len(value)
-    return tuple(int(value[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
+    return tuple(int(value[i: i + lv // 3], 16) for i in range(0, lv, lv // 3))
+
+
+def val2col_light(val):
+    val = val / 100 * 3
+    i = val
+    if i < 0.2:
+        return (255, 255, 204)
+    elif i < 0.4:
+        return (255, 255, 153)
+    elif i < 0.6:
+        return (255, 255, 102)
+    elif i < 0.8:
+        return (255, 255, 51)
+    elif i < 1.0:
+        return (255, 255, 0)
+
+    elif i < 1.2:
+        return (204, 204, 0)
+    elif i < 1.4:
+        return (204, 204, 204)
+    elif i < 1.6:
+        return (153, 153, 153)
+    elif i < 1.8:
+        return (102, 102, 102)
+    elif i < 2.0:
+        return (51, 51, 51)
+    else:
+        return (0, 0, 0)
 
 
 def val2col(val):
@@ -130,11 +158,20 @@ def background_thread(scheme_id):
         colors = []
         for sensor in config['sensors']:
             data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
-            colors.append(val2col(data['val']))
+            if sensor["uuid"] in (1, 2, 3, 4):
+                colors_temp.append(val2col(data['val']))
+            else:
+                colors_light.append(val2col_light(data['val']))
 
-        res = createColorGrid((100, 100), colors[0], colors[1], colors[2], colors[3])
+        res = createColorGrid((100, 100), colors_temp[0], colors_temp[1], colors_temp[2], colors_temp[3])
         socketio.emit(
             'my_response',
+            res,
+            namespace='/apisocket0',
+        )
+        res = createColorGrid((100, 100), colors_light[0], colors_light[1], colors_light[2], colors_light[3])
+        socketio.emit(
+            'my_response_light',
             res,
             namespace='/apisocket0',
         )

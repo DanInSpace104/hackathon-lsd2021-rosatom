@@ -30,6 +30,22 @@
         {
             "name": "Temerature4",
             "uuid": 4
+        },
+         {
+            "name": "Light1",
+            "uuid": 5
+        },
+        {
+            "name": "Light2",
+            "uuid": 6
+        },
+        {
+            "name": "Light3",
+            "uuid": 7
+        },
+        {
+            "name": "Light4",
+            "uuid": 8
         }
     ]
 }

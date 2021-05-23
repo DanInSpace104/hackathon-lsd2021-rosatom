@@ -1,12 +1,14 @@
-import * as THREE from '/assets/libjs/three.module.js';
+import * as THREE from '../libjs/three.module.js';
 
-import { } from '/assets/libjs/socket.io.min.js';
-import { } from '/assets/libjs/yaml.min.js';
-import { OrbitControls } from '/assets/libjs/OrbitControls.js';
-import { OBJLoader } from '/assets/libjs/OBJLoader.js';
-import { MTLLoader } from '/assets/libjs/MTLLoader.js';
-import Stats from '/assets/libjs/stats.module.js';
+import { } from '../libjs/socket.io.min.js';
+import { } from '../libjs/yaml.min.js';
+import { OrbitControls } from '../libjs/OrbitControls.js';
+import { OBJLoader } from '../libjs/OBJLoader.js';
+import { MTLLoader } from '../libjs/MTLLoader.js';
+import Stats from '../libjs/stats.module.js';
 
+import { RectAreaLightHelper } from '../libjs/RectAreaLightHelper.js';
+import { RectAreaLightUniformsLib } from '../libjs/RectAreaLightUniformsLib.js';
 
 let config = YAML.load("/assets/scheme/sheme1.yaml")['SensorParams']
 let data
@@ -50,9 +52,8 @@ function readyPage() {
         connectStatus = -1;
     });
 
-    socket.on('my_response', function (msg) {
+    socket.on('my_response_light', function (msg) {
         // console.log(msg)
-        console.log(msg,'hello')
         data = msg
     })
 }
@@ -97,7 +98,7 @@ function init() {
         const light = new THREE.DirectionalLight(color, intensity);
         light.position.set(5, 10, 2);
         scene.add(light);
-        scene.add(light.target);
+        // scene.add(light.target);
     }
     const objLoader = new OBJLoader();
     const mtlLoader = new MTLLoader();
@@ -106,10 +107,25 @@ function init() {
         objLoader.setMaterials(mtl);
         objLoader.load('/assets/scheme/sha3.obj', (root) => {
             scene.add(root);
+
         });
     });
-
+    // light
+    // let directionalLight = new THREE.DirectionalLight( 0xffffff);
+    // directionalLight.position.set( 10, 10, 10 );
+    // scene.add( directionalLight );
+    //
+    // let geometry = new THREE.SphereGeometry( 0.1, 32, 32 );
+    // let material2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    // const sphere = new THREE.Mesh( geometry, material2 );
+    // sphere.position.set(5,5,5)
+    // scene.add( sphere );
+    // let directionalLight = new THREE.DirectionalLight( 0xff000f, 1 );
+    // directionalLight.position.set(10,10,10)
+    // directionalLight.target = sphere
+    // scene.add( directionalLight );
     geometry = new THREE.BufferGeometry();
+
 
     const positions = [];
     var colors = [];
@@ -192,7 +208,6 @@ function animate() {
 
     for (let i = 0; i < resolution; i++) {
         for (let j = 0; j < resolution; j++) {
-            // console.log(data)
             colors.push(data[i][j][0] / 255, data[i][j][1] / 255, data[i][j][2] / 255)
             // console.log(data[i][j])
         }
