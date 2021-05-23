@@ -214,7 +214,7 @@ def index():
 
 @app.route('/light')
 def ligth():
-    return render_template('ligth.html')
+    return render_template('light.html')
 
 
 @app.route('/model')
