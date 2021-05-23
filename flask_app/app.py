@@ -231,7 +231,6 @@ def index():
     return render_template('index.html')
 
 
-
 @app.route('/model')
 def model_view():
     return render_template('model.html')
