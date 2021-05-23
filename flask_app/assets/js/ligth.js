@@ -11,16 +11,16 @@ import { RectAreaLightHelper } from '../libjs/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from '../libjs/RectAreaLightUniformsLib.js';
 
 let config = YAML.load("/assets/scheme/sheme1.yaml")['SensorParams']
-let data
+let data = []
 
 const resolution = 100
 const STEP = 0.14
 const field = [] // 2d array
 const particles = resolution * resolution
 for (let i = 0; i < resolution; i++) {
-    field.push([])
+    data.push([])
     for (let j = 0; j < resolution; j++) {
-        field[i].push(0)
+        data[i].push([0, 0, 0])
     }
 }
 const NET_ZERO_X = -5
@@ -32,8 +32,8 @@ let namespace;
 let wsuripath;
 let connectStatus;
 function readyPage() {
-    namespace = "/apisocket0";
-    wsuripath = "ws://2.57.186.96:5000/apisocket0"
+    namespace = "/apisocket1";
+    wsuripath = "ws://2.57.186.96:5000/apisocket1"
     console.log("connect");
     const socket = io.connect(wsuripath);
     socket.on('connect', function () {
@@ -52,7 +52,7 @@ function readyPage() {
         connectStatus = -1;
     });
 
-    socket.on('my_response_light', function (msg) {
+    socket.on('my_response', function (msg) {
         // console.log(msg)
         data = msg
     })
