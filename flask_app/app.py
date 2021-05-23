@@ -1,8 +1,7 @@
 import json
 import os
+
 import flask_socketio
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
 import redis
 from flask import Flask, request, send_from_directory
@@ -83,7 +82,7 @@ def colorFader(c1, c2, mix=0):  # fade (linear interpolate) from color c1 (at mi
 def hex_to_rgb(value):
     value = value.lstrip('#')
     lv = len(value)
-    return tuple(int(value[i: i + lv // 3], 16) for i in range(0, lv, lv // 3))
+    return tuple(int(value[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
 
 
 def val2col_light(val):
@@ -163,13 +162,17 @@ def background_thread(scheme_id):
             else:
                 colors_light.append(val2col_light(data['val']))
 
-        res = createColorGrid((100, 100), colors_temp[0], colors_temp[1], colors_temp[2], colors_temp[3])
+        res = createColorGrid(
+            (100, 100), colors_temp[0], colors_temp[1], colors_temp[2], colors_temp[3]
+        )
         socketio.emit(
             'my_response',
             res,
             namespace='/apisocket0',
         )
-        res = createColorGrid((100, 100), colors_light[0], colors_light[1], colors_light[2], colors_light[3])
+        res = createColorGrid(
+            (100, 100), colors_light[0], colors_light[1], colors_light[2], colors_light[3]
+        )
         socketio.emit(
             'my_response_light',
             res,
@@ -201,6 +204,16 @@ def testsocket():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/light')
+def light():
+    return render_template('light.html')
+
+
+@app.route('/energy')
+def energy():
+    return render_template('energy.html')
 
 
 @app.route('/test')
