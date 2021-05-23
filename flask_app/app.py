@@ -2,8 +2,6 @@ import json
 import os
 
 import flask_socketio
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
 import redis
 from flask import Flask, request, send_from_directory
@@ -237,6 +235,16 @@ def testsocket():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/light')
+def light():
+    return render_template('light.html')
+
+
+@app.route('/energy')
+def energy():
+    return render_template('energy.html')
 
 
 @app.route('/test')
