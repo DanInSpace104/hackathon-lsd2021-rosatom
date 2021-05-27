@@ -9,22 +9,22 @@ import Stats from '/assets/libjs/stats.module.js';
 
 
 let config = YAML.load("/assets/scheme/sheme1.yaml")['SensorParams']
-let data
 
 const resolution = 100
 const STEP = 0.14
-const field = [] // 2d array
+var data = [] // 2d array
 const particles = resolution * resolution
 for (let i = 0; i < resolution; i++) {
-    field.push([])
+    data.push([])
     for (let j = 0; j < resolution; j++) {
-        field[i].push(0)
+        data[i].push([0, 0, 0])
     }
 }
 const NET_ZERO_X = -5
 const NET_ZERO_Z = -5
-const HEIGHT = 3.3
+const HEIGHT = 0.1
 const SIZE = 0.3
+var geometry
 
 let namespace;
 let wsuripath;
@@ -50,9 +50,9 @@ function readyPage() {
         connectStatus = -1;
     });
 
-    socket.on('my_response_electro', function (msg) {
+    socket.on('my_response', function (msg) {
         // console.log(msg)
-        console.log(msg,'hello')
+        // console.log(msg, 'hello')
         data = msg
     })
 }
@@ -62,7 +62,6 @@ let container, stats;
 let camera, scene, renderer;
 
 let points;
-var geometry
 
 init();
 animate();
@@ -109,7 +108,7 @@ function init() {
         });
     });
 
-    let geometry = new THREE.BufferGeometry();
+    geometry = new THREE.BufferGeometry();
 
     const positions = [];
     var colors = [];
@@ -146,29 +145,38 @@ function init() {
     points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    geometry = new THREE.BoxGeometry( 1, 1, 0.4 );
-    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
-    let cube = new THREE.Mesh( geometry, material );
-    cube.position.set(-4.5,2,4.8)
-    scene.add( cube );
+    {
+        const geometry = new THREE.BoxGeometry(1, 1, 0.4);
+        const material = new THREE.MeshBasicMaterial({ color: "rgb(255, 186, 0)" });
+        let cube = new THREE.Mesh(geometry, material);
+        cube.position.set(-4.5, 2, 4.8)
+        scene.add(cube);
+    }
 
-    geometry = new THREE.BoxGeometry(1, 1, 0.4 );
-    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
-    cube = new THREE.Mesh( geometry, material );
-    cube.position.set(8.5,2,6)
-    scene.add( cube );
+    {
+        const geometry = new THREE.BoxGeometry(1, 1, 0.4);
+        const material = new THREE.MeshBasicMaterial({ color: "rgb(255, 186, 0)" });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(8.5, 2, 6)
+        scene.add(cube);
+    }
 
-    geometry = new THREE.BoxGeometry( 0.8, 0.8, 0.2 );
-    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
-    cube = new THREE.Mesh( geometry, material );
-    cube.position.set(-4.2,2,-5.2)
-    scene.add( cube );
+    {
+        const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.2);
+        const material = new THREE.MeshBasicMaterial({ color: "rgb(255, 186, 0)" });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(-4.2, 2, -5.2)
+        scene.add(cube);
+    }
 
-    geometry = new THREE.BoxGeometry( 0.8, 0.8, 0.2 );
-    material = new THREE.MeshBasicMaterial( {color: "rgb(255, 186, 0)"} );
-    cube = new THREE.Mesh( geometry, material );
-    cube.position.set(7,2,-3.2)
-    scene.add( cube );
+    {
+        const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.2);
+        const material = new THREE.MeshBasicMaterial({ color: "rgb(255, 186, 0)" });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(7, 2, -3.2)
+        scene.add(cube);
+    }
+
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -204,19 +212,11 @@ function animate() {
     render();
     stats.update();
 
-    const positions = [];
     var colors = [];
-
-    const color = new THREE.Color();
-
-
-    colors = [];
 
     for (let i = 0; i < resolution; i++) {
         for (let j = 0; j < resolution; j++) {
-            // console.log(data)
             colors.push(data[i][j][0] / 255, data[i][j][1] / 255, data[i][j][2] / 255)
-            // console.log(data[i][j])
         }
     }
 

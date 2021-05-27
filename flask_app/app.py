@@ -92,16 +92,23 @@ def on_disconnect():
     print('Disconnect:', request.sid)
 
 
-def colorFader(c1, c2, mix=0):  # fade (linear interpolate) from color c1 (at mix=0) to c2 (mix=1)
-    c1 = np.array(mpl.colors.to_rgb(c1))
-    c2 = np.array(mpl.colors.to_rgb(c2))
-    return mpl.colors.to_hex((1 - mix) * c1 + mix * c2)
+@socketio.on('connect', namespace='/apisocket2')
+def on_connect():
+    print('Connect:', request.sid)
+    socketio.emit('my_message', {'data': 'Connected', 'count': 1})
 
 
-def hex_to_rgb(value):
-    value = value.lstrip('#')
-    lv = len(value)
-    return tuple(int(value[i : i + lv // 3], 16) for i in range(0, lv, lv // 3))
+@socketio.on('join', namespace='/apisocket2')
+def on_join(scheme_id):
+    print('Join:', scheme_id)
+    flask_socketio.join_room(scheme_id)
+    socketio.emit('my_message', f'joined room {scheme_id}')
+    socketio.start_background_task(target=background_thread_energo, scheme_id=scheme_id)
+
+
+@socketio.on('disconnect', namespace='/apisocket2')
+def on_disconnect():
+    print('Disconnect:', request.sid)
 
 
 def val2col_light(val):
@@ -170,6 +177,7 @@ def val2col(val):
     else:
         return (0, 0, 0)
 
+
 def val2col_electro(val):
     val = val / 100 * 3
     i = val
@@ -189,6 +197,7 @@ def val2col_electro(val):
         return (178, 34, 34)
     else:
         return (0, 0, 0)
+
 
 def background_thread(scheme_id):
     while True:
@@ -225,12 +234,13 @@ def background_thread_ligth(scheme_id):
         )
         socketio.sleep(1)
 
+
 def background_thread_energo(scheme_id):
     while True:
         colors_energo = []
         for sensor in config['sensors']:
             data = json.loads(rcache.get(f'sensor/telemetry/{sensor["uuid"]}'))
-            colors_energo.append(val2col_light(data['val']))
+            colors_energo.append(val2col_electro(data['val']))
 
         res = createColorGrid(
             (100, 100), colors_energo[0], colors_energo[1], colors_energo[2], colors_energo[3]
@@ -257,6 +267,7 @@ def model_view():
 def light_view():
     return render_template('light.html')
 
+
 @app.route('/yamltest')
 def yamltest():
     return render_template('yamltest.html')
@@ -270,7 +281,6 @@ def testsocket():
 @app.route('/login')
 def login():
     return render_template('login.html')
-
 
 
 @app.route('/energy')

@@ -50,7 +50,7 @@ function readyPage() {
     });
 
     socket.on('my_response', function (msg) {
-	console.log('hi')
+        console.log('hi')
         // console.log(msg)
         data = msg
     })
